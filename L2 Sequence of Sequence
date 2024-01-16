@@ -1,0 +1,86 @@
+Given two integers m and n, try making a special sequence of numbers seq of length n such that
+
+seqi+1 >= 2*seqi 
+seqi > 0
+seqi <= m
+Your task is to determine total number of such special sequences possible.
+
+Example 1:
+
+Input: 
+m = 10
+n = 4
+Output: 
+4
+Explaination: 
+There should be n elements and 
+value of last element should be at-most m. 
+The sequences are {1, 2, 4, 8}, {1, 2, 4, 9}, 
+{1, 2, 4, 10}, {1, 2, 5, 10}.
+Example 2:
+
+Input: 
+m = 5
+n = 2
+Output: 
+6
+Explaination: 
+The sequences are {1, 2}, 
+{1, 3}, {1, 4}, {1, 5}, {2, 4}, {2, 5}.
+
+Solution:
+
+Using recursion take or notake technique.
+//{ Driver Code Starts
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution{
+public:
+    int solve (int m , int n , vector<vector<int>>&dp ){
+        
+        if(n == 0){
+            return 1;
+        }
+        
+        if(m < n){
+            return 0;
+        }
+        
+        if(dp[m][n]!=-1){
+            return dp[m][n];
+        }
+        
+        
+        int take = solve(m/2 , n-1 , dp );
+        
+        int notake = solve(m-1 , n , dp);
+        
+        return dp[m][n] = take + notake ;
+    }
+    int numberSequence(int m, int n){
+        // code here
+        vector<vector<int>>dp(m+1 , vector<int>(n+1 , -1));
+        return solve(m , n  , dp);
+    }
+};
+
+//{ Driver Code Starts.
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int m, n;
+        cin>>m>>n;
+        
+        Solution ob;
+        cout<<ob.numberSequence(m, n)<<endl;
+    }
+    return 0;
+}
+// } Driver Code Ends
