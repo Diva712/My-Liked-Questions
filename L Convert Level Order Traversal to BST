@@ -1,0 +1,103 @@
+Given an array of size N containing level order traversal of a BST. The task is to complete the function constructBst(), that construct the BST (Binary Search Tree) from its given level order traversal.
+
+Example 1:
+
+Input:
+N = 9
+BST[] = {7,4,12,3,6,8,1,5,10}
+Output: 7 4 3 1 6 5 12 8 10
+Explanation: After constructing BST, the
+preorder traversal of BST is
+7 4 3 1 6 5 12 8 10.
+Example 2:
+
+Input:
+N = 6
+BST[] = {1,3,4,6,7,8}
+Output: 1 3 4 6 7 8
+Explanation: After constructing BST, the
+preorder traversal of BST is 1 3 4 6 7 8.
+
+
+Solution:
+//{ Driver Code Starts
+//Initial Template for C++
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* right;
+    Node* left;
+    
+    Node(int x){
+        data = x;
+        right = NULL;
+        left = NULL;
+    }
+};
+
+void preorderTraversal(Node* root)
+{
+	if (!root)return;
+	cout << root->data << " ";
+	preorderTraversal(root->left);
+	preorderTraversal(root->right); 
+}
+
+Node* constructBst(int arr[], int n);
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n;
+        cin>>n;
+        int arr[n];
+        for(int i=0; i<n; i++)cin>>arr[i];
+        Node *root = constructBst(arr, n);
+        preorderTraversal(root);
+        cout<<endl;
+    }
+	return 0; 
+}
+// } Driver Code Ends
+
+
+//User function Template for C++
+
+
+//Function to construct the BST from its given level order traversal.
+Node*solve(vector<int>&v){
+    
+    if(v.size() == 0){
+        return NULL;
+    }
+    vector<int>left , right ;
+    Node*root = new Node(v[0]);
+    for(int i=1 ; i<v.size(); i++){
+        if(v[i]<v[0]){
+            left.push_back(v[i]);
+        }
+        else{
+            right.push_back(v[i]);
+        }
+    }
+    
+    root->left = solve(left);
+    root->right = solve(right);
+    
+    return root;
+}
+Node* constructBst(int arr[], int n)
+{
+    // Code here
+    
+    vector<int>vec;
+    for(int i=0; i<n ; i++){
+        vec.push_back(arr[i]);
+    }
+    return solve(vec);
+}
