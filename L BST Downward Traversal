@@ -1,0 +1,83 @@
+Given a Binary Search Tree with unique node values and a target value. You have to find the node whose data is equal to target and return the sum of all descendant (of target) node's data which are vertically below the target node. Initially, you are at the root node.
+Note: If target node is not present in bst then return -1.
+
+Example 1:
+
+Input:
+
+
+Target = 35
+Output: 32
+Explanation: Vertically below 35 is 32.
+
+
+Solution :
+ long long int solve(Node*root , int k){
+        
+        long long int ans = 0;
+        unordered_map<int,int>mpp;
+        queue<pair<Node*,int>>q;
+        q.push({root , 0});
+        
+        while(!q.empty()){
+            auto it = q.front();
+            q.pop();
+            Node*node = it.first;
+            int x = it.second;
+            if(x == 0){
+                ans =  ans + node->data;
+            }
+            mpp[x] = node->data;
+            
+            if(node->left!=NULL){
+                q.push({node->left , x-1});
+            }
+            
+            if(node->right!=NULL){
+                q.push({node->right , x+1});
+            }
+        }
+        
+        return ans - root->data;
+    }
+
+   
+    long long int verticallyDownBST(Node *root,int target){
+        // Code here
+        int line = 0;
+        long long int ans = 0;
+        Node*target_node = NULL;
+        if(root == NULL){
+            return 0;
+        }
+        queue<pair<Node*,int>>q;
+        unordered_map<int,int>mpp;
+        q.push({root , 0});
+        while(!q.empty()){
+            auto it = q.front();
+            Node*node = it.first;
+            int x = it.second;
+            q.pop();
+            
+            if(it.first->data == target){
+                target_node = node;
+                line = x;
+                break;
+            }
+            
+            mpp[x] = node->data;
+            if(node->left!= NULL){
+                q.push({node->left , x-1});
+            }
+            
+            if(node->right!= NULL){
+                q.push({node->right , x+1});
+            }
+        }
+        if(target_node == NULL){
+            return -1;
+        }
+        
+        return solve(target_node , line);
+        
+        
