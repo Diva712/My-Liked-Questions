@@ -1,0 +1,49 @@
+Given a binary tree and a target, find the number of node in the minimum sub-tree with the given sum equal to the target which is also a binary search tree.
+
+Example 1:
+
+Input:
+           13
+         /    \
+       5       23
+      / \      / \
+     N   17   N   N
+         /
+        16
+Target: 38
+Output: 3
+Explanation: 5,17,16 is the smallest subtree
+with length 3.
+
+
+Solution:
+ vector<int> solve(Node*root , int target , int& ans){
+        
+        if(root == NULL){
+            return {1,0,0,INT_MAX,INT_MIN}; // bst , sum , node , left_max , right_min
+        }
+        vector<int>left = solve(root->left , target , ans);
+        vector<int>right = solve(root->right , target , ans);
+        if(root->data<=left[4] || root->data >= right[3]){
+            return {0,0,0,0,0};
+        }
+        int sum = left[1] + right[1] + root->data;
+        int n = left[2] + right[2] + 1;
+        if(left[0]==1 && right[0] == 1 && sum == target){
+            ans = min(ans , n);
+        }
+        return {left[0]&right[0] , sum , n , min(left[3] , root->data) , max(right[4] , root->data)};
+    }
+    int minSubtreeSumBST(int target, Node *root) {
+        // code here
+        int ans = INT_MAX;
+        vector<int>vec = solve(root , target , ans);
+        if(vec[0]==1 && vec[1] == target){
+            ans = min(ans , vec[2]);
+        }
+        if(ans == INT_MAX)
+        {
+            return -1;
+        }
+        return ans;
+    }
